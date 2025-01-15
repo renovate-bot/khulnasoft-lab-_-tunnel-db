@@ -1,8 +1,8 @@
 module github.com/aquasecurity/trivy-db
 
-go 1.22.0
+go 1.22.9
 
-toolchain go1.22.5
+toolchain go1.23.4
 
 require (
 	github.com/aquasecurity/bolt-fixtures v0.0.0-20200903104109-d34e7f983986
@@ -12,7 +12,7 @@ require (
 	github.com/aquasecurity/go-version v0.0.0-20210121072130-637058cfe492
 	github.com/briandowns/spinner v1.23.0
 	github.com/fatih/color v1.10.0 // indirect
-	github.com/knqyf263/go-deb-version v0.0.0-20190517075300-09fca494f03d
+	github.com/knqyf263/go-deb-version v0.0.0-20241115132648-6f4aee6ccd23
 	github.com/knqyf263/go-rpm-version v0.0.0-20170716094938-74609b86c936
 	github.com/masahiro331/go-mvn-version v0.0.0-20210429150710-d3157d602a08
 	github.com/pandatix/go-cvss v0.6.2
