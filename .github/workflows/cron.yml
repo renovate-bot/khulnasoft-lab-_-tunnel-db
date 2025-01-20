@@ -3,10 +3,12 @@ on:
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:
+
 env:
-  REPO_OWNER: ${{ github.repository_owner }} # used in 'make db-build'
+  REPO_OWNER: ${{ github.repository_owner }}
   GH_USER: khulnasoft-bot
   VERSION: 2
+
 jobs:
   build:
     name: Build DB
@@ -15,7 +17,7 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@v10
         with:
-          root-reserve-mb: 32768 # vuln-list dirs + language repositories use more than 12GB of storage
+          root-reserve-mb: 32768
           remove-android: "true"
           remove-docker-images: "true"
           remove-dotnet: "true"
@@ -67,25 +69,23 @@ jobs:
         run: |
           curl -LO https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz
           tar -xvf ./oras_1.2.0_linux_amd64.tar.gz
+          sudo mv oras /usr/local/bin/
 
       - name: Upload assets to registries
         run: |
           lowercase_repo=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "Starting artifact upload process..."
           
-          # Define an array of registry base URLs and their corresponding repository names
           declare -A registries=(
             ["ghcr.io"]="${lowercase_repo}"
             ["docker.io"]="${lowercase_repo}"
           )
           
-          # Special case for docker.io if the organization is 'khulnasoft-lab'
           if [[ "${lowercase_repo}" == "khulnasoft-lab/"* ]]; then
             registries["docker.io"]="khulnasoft/${lowercase_repo#khulnasoft-lab/}"
             echo "Docker Hub repository adjusted for khulnasoft-lab: ${registries["docker.io"]}"
           fi
           
-          # Loop through each registry and push the artifact
           for registry in "${!registries[@]}"; do
             repo_name=${registries[$registry]}
             full_registry_url="${registry}/${repo_name}"
