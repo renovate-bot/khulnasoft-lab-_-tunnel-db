@@ -1,4 +1,3 @@
----
 name: Tunnel DB
 on:
   schedule:
@@ -32,7 +31,6 @@ jobs:
 
       - name: Install bbolt
         run: go install go.etcd.io/bbolt/cmd/bbolt@v1.3.5
-
 
       - name: Download vuln-list and advisories
         run: make db-fetch-langs db-fetch-vuln-list
@@ -70,7 +68,6 @@ jobs:
           curl -LO https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz
           tar -xvf ./oras_1.2.0_linux_amd64.tar.gz
 
-
       - name: Upload assets to registries
         run: |
           lowercase_repo=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
@@ -79,7 +76,6 @@ jobs:
           # Define an array of registry base URLs and their corresponding repository names
           declare -A registries=(
             ["ghcr.io"]="${lowercase_repo}"
-            ["public.ecr.aws"]="${lowercase_repo}"
             ["docker.io"]="${lowercase_repo}"
           )
           
