@@ -6,7 +6,7 @@ type UbuntuCVE struct {
 	Priority    string
 	Patches     map[PackageName]Patch
 	References  []string
-	PublicDate  string // for extensibility, not used in trivy-db
+	PublicDate  string // for extensibility, not used in tunnel-db
 }
 
 type PackageName string

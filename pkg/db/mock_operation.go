@@ -3,7 +3,7 @@
 package db
 
 import (
-	types "github.com/aquasecurity/trivy-db/pkg/types"
+	types "github.com/khulnasoft-lab/tunnel-db/pkg/types"
 	mock "github.com/stretchr/testify/mock"
 	bbolt "go.etcd.io/bbolt"
 )

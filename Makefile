@@ -9,7 +9,7 @@ GOPATH=$(shell go env GOPATH)
 GOBIN=$(GOPATH)/bin
 
 ifndef REPO_OWNER
-    REPO_OWNER=aquasecurity
+    REPO_OWNER=khulnasoft-lab
 endif
 
 u := $(if $(update),-u)
@@ -22,7 +22,7 @@ wire: $(GOBIN)/wire
 	wire gen ./...
 
 $(GOBIN)/mockery:
-	go install github.com/knqyf263/mockery/cmd/mockery@latest
+	go install github.com/khulnasoft-lab/mockery/cmd/mockery@latest
 
 .PHONY: mock
 mock: $(GOBIN)/mockery
@@ -50,7 +50,7 @@ lintfix: $(GOBIN)/golangci-lint
 
 .PHONY: build
 build:
-	go build $(LDFLAGS) ./cmd/trivy-db
+	go build $(LDFLAGS) ./cmd/tunnel-db
 
 .PHONY: clean
 clean:
@@ -59,7 +59,7 @@ clean:
 $(GOBIN)/bbolt:
 	go install go.etcd.io/bbolt/cmd/bbolt@v1.3.5
 
-trivy-db:
+tunnel-db:
 	make build
 
 .PHONY: db-fetch-langs
@@ -76,19 +76,19 @@ db-fetch-langs:
 	wget -qO - https://github.com/kubernetes-sigs/cve-feed-osv/archive/main.tar.gz | tar xz -C $(CACHE_DIR)/k8s-cve-feed --strip-components=1
 
 .PHONY: db-build
-db-build: trivy-db
-	./trivy-db build --cache-dir ./$(CACHE_DIR) --output-dir ./$(OUT_DIR) --update-interval 24h
+db-build: tunnel-db
+	./tunnel-db build --cache-dir ./$(CACHE_DIR) --output-dir ./$(OUT_DIR) --update-interval 24h
 
 .PHONY: db-compact
-db-compact: $(GOBIN)/bbolt out/trivy.db
+db-compact: $(GOBIN)/bbolt out/tunnel.db
 	mkdir -p ./$(ASSET_DIR)
-	$(GOBIN)/bbolt compact -o ./$(ASSET_DIR)/trivy.db ./$(OUT_DIR)/trivy.db
+	$(GOBIN)/bbolt compact -o ./$(ASSET_DIR)/tunnel.db ./$(OUT_DIR)/tunnel.db
 	cp ./$(OUT_DIR)/metadata.json ./$(ASSET_DIR)/metadata.json
 	rm -rf ./$(OUT_DIR)
 
 .PHONY: db-compress
-db-compress: $(ASSET_DIR)/trivy.db $(ASSET_DIR)/metadata.json
-	tar cvzf ./$(ASSET_DIR)/db.tar.gz -C $(ASSET_DIR) trivy.db metadata.json
+db-compress: $(ASSET_DIR)/tunnel.db $(ASSET_DIR)/metadata.json
+	tar cvzf ./$(ASSET_DIR)/db.tar.gz -C $(ASSET_DIR) tunnel.db metadata.json
 
 .PHONY: db-clean
 db-clean:
@@ -104,5 +104,5 @@ db-fetch-vuln-list:
 	wget -qO - https://github.com/$(REPO_OWNER)/vuln-list-debian/archive/main.tar.gz | tar xz -C $(CACHE_DIR)/vuln-list-debian --strip-components=1
 	mkdir -p $(CACHE_DIR)/vuln-list-nvd
 	wget -qO - https://github.com/$(REPO_OWNER)/vuln-list-nvd/archive/main.tar.gz | tar xz -C $(CACHE_DIR)/vuln-list-nvd --strip-components=1
-	mkdir -p $(CACHE_DIR)/vuln-list-aqua
-	wget -qO - https://github.com/$(REPO_OWNER)/vuln-list-aqua/archive/main.tar.gz | tar xz -C $(CACHE_DIR)/vuln-list-aqua --strip-components=1
+	mkdir -p $(CACHE_DIR)/vuln-list-khulnasoft
+	wget -qO - https://github.com/$(REPO_OWNER)/vuln-list-khulnasoft/archive/main.tar.gz | tar xz -C $(CACHE_DIR)/vuln-list-khulnasoft --strip-components=1

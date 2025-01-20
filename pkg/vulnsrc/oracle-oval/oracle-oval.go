@@ -10,16 +10,15 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/db"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	version "github.com/knqyf263/go-rpm-version"
 	"github.com/samber/lo"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/exp/maps"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/db"
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/utils"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 var (
@@ -39,7 +38,7 @@ type PutInput struct {
 	VulnID     string                       // CVE-ID or ELSA-ID
 	Vuln       types.VulnerabilityDetail    // vulnerability detail such as CVSS and description
 	Advisories map[Package]types.Advisories // pkg => advisories
-	OVALs      []OracleOVAL                 // for extensibility, not used in trivy-db
+	OVALs      []OracleOVAL                 // for extensibility, not used in tunnel-db
 }
 
 type DB interface {
@@ -49,7 +48,7 @@ type DB interface {
 }
 
 type VulnSrc struct {
-	DB // Those who want to customize Trivy DB can override put/get methods.
+	DB // Those who want to customize Tunnel DB can override put/get methods.
 }
 
 type Oracle struct {
@@ -80,7 +79,7 @@ func (vs *VulnSrc) Update(dir string) error {
 }
 
 // Parse parses all the advisories from Alma Linux.
-// It is exported for those who want to customize trivy-db.
+// It is exported for those who want to customize tunnel-db.
 func (vs *VulnSrc) parse(rootDir string) ([]OracleOVAL, error) {
 	var ovals []OracleOVAL
 	err := utils.FileWalk(rootDir, func(r io.Reader, path string) error {
@@ -347,7 +346,7 @@ func (o *Oracle) Get(release, pkgName, arch string) ([]types.Advisory, error) {
 		}
 
 		// For backward compatibility (This code can be deleted after Dec 19th, 2024)
-		// The old trivy-db has no entries, but has fixed versions and custom fields.
+		// The old tunnel-db has no entries, but has fixed versions and custom fields.
 		if len(adv.Entries) == 0 {
 			advisories = append(advisories, types.Advisory{
 				VulnerabilityID: vulnID,

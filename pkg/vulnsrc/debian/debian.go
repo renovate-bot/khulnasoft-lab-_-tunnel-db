@@ -10,14 +10,13 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/db"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	debver "github.com/knqyf263/go-deb-version"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/db"
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/utils"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 const (
@@ -461,7 +460,7 @@ func (vs VulnSrc) putAdvisory(tx *bolt.Tx, bkt bucket, advisory Advisory) error 
 	return nil
 }
 
-// defaultPut puts the advisory into Trivy DB, but it can be overwritten.
+// defaultPut puts the advisory into Tunnel DB, but it can be overwritten.
 func defaultPut(dbc db.Operation, tx *bolt.Tx, advisory interface{}) error {
 	adv, ok := advisory.(Advisory)
 	if !ok {

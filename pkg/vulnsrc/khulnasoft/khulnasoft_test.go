@@ -4,10 +4,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/aqua"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrctest"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/khulnasoft"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrctest"
 )
 
 func TestVulnSrc_Update(t *testing.T) {
@@ -25,19 +25,19 @@ func TestVulnSrc_Update(t *testing.T) {
 				{
 					Key: []string{
 						"data-source",
-						"pip::The Aqua Security Vulnerability Database",
+						"pip::The Khulnasoft Security Vulnerability Database",
 					},
 					Value: types.DataSource{
-						ID:   vulnerability.Aqua,
-						Name: "The Aqua Security Vulnerability Database",
-						URL:  "https://github.com/aquasecurity/vuln-list-aqua",
+						ID:   vulnerability.Khulnasoft,
+						Name: "The Khulnasoft Security Vulnerability Database",
+						URL:  "https://github.com/khulnasoft-lab/vuln-list-khulnasoft",
 					},
 				},
 				{
 					Key: []string{
 						"advisory-detail",
-						"AQUA-2024-0001",
-						"pip::The Aqua Security Vulnerability Database",
+						"KHULNASOFT-2024-0001",
+						"pip::The Khulnasoft Security Vulnerability Database",
 						"ultralytics",
 					},
 					Value: types.Advisory{
@@ -54,7 +54,7 @@ func TestVulnSrc_Update(t *testing.T) {
 				{
 					Key: []string{
 						"vulnerability-detail",
-						"AQUA-2024-0001",
+						"KHULNASOFT-2024-0001",
 						"aqua",
 					},
 					Value: types.VulnerabilityDetail{
@@ -71,7 +71,7 @@ func TestVulnSrc_Update(t *testing.T) {
 				{
 					Key: []string{
 						"vulnerability-id",
-						"AQUA-2024-0001",
+						"KHULNASOFT-2024-0001",
 					},
 					Value: map[string]interface{}{},
 				},

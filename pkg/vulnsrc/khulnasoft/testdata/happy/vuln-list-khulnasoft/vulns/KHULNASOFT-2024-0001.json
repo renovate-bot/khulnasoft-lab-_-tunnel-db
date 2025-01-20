@@ -1,6 +1,6 @@
 {
   "schema_version": "1.6.7",
-  "id": "AQUA-2024-0001",
+  "id": "KHULNASOFT-2024-0001",
   "modified": "2024-12-18T12:00:00Z",
   "published": "2024-12-18T12:00:00Z",
   "summary": "Vulnerable app versions contains xmrig cryptominer",

@@ -11,16 +11,15 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/db"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils/ints"
+	ustrings "github.com/khulnasoft-lab/tunnel-db/pkg/utils/strings"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/exp/slices"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/db"
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/utils"
-	"github.com/aquasecurity/trivy-db/pkg/utils/ints"
-	ustrings "github.com/aquasecurity/trivy-db/pkg/utils/strings"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 const (
@@ -249,7 +248,7 @@ func (vs VulnSrc) Get(pkgName string, repositories, nvrs []string) ([]types.Advi
 	}
 
 	if len(cpeIndices) == 0 {
-		return nil, xerrors.Errorf("unable to find CPE indices. See https://github.com/aquasecurity/trivy-db/issues/435 for details")
+		return nil, xerrors.Errorf("unable to find CPE indices. See https://github.com/khulnasoft-lab/tunnel-db/issues/435 for details")
 	}
 
 	rawAdvisories, err := vs.dbc.ForEachAdvisory([]string{rootBucket}, pkgName)

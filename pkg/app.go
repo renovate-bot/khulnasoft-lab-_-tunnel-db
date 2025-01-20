@@ -3,19 +3,18 @@ package pkg
 import (
 	"time"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc"
 	"github.com/urfave/cli"
-
-	"github.com/aquasecurity/trivy-db/pkg/utils"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc"
 )
 
 type AppConfig struct{}
 
 func (ac *AppConfig) NewApp(version string) *cli.App {
 	app := cli.NewApp()
-	app.Name = "trivy-db"
+	app.Name = "tunnel-db"
 	app.Version = version
-	app.Usage = "Trivy DB builder"
+	app.Usage = "Tunnel DB builder"
 
 	app.Commands = []cli.Command{
 		{

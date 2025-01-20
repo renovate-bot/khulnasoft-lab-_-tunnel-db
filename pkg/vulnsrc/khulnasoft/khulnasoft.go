@@ -3,16 +3,16 @@ package aqua
 import (
 	"path/filepath"
 
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/osv"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/osv"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 )
 
 const (
-	sourceID = vulnerability.Aqua
+	sourceID = vulnerability.Khulnasoft
 )
 
-var vulnsDir = filepath.Join("vuln-list-aqua", "vulns")
+var vulnsDir = filepath.Join("vuln-list-khulnasoft", "vulns")
 
 type VulnSrc struct{}
 
@@ -29,8 +29,8 @@ func (VulnSrc) Update(root string) error {
 	for _, ecosystem := range vulnerability.Ecosystems {
 		dataSources[ecosystem] = types.DataSource{
 			ID:   sourceID,
-			Name: "The Aqua Security Vulnerability Database",
-			URL:  "https://github.com/aquasecurity/vuln-list-aqua",
+			Name: "The Khulnasoft Security Vulnerability Database",
+			URL:  "https://github.com/khulnasoft-lab/vuln-list-khulnasoft",
 		}
 	}
 

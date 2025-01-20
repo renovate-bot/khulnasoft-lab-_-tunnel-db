@@ -8,11 +8,10 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/log"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/log"
-	"github.com/aquasecurity/trivy-db/pkg/types"
 )
 
 type CustomPut func(dbc Operation, tx *bolt.Tx, adv interface{}) error
@@ -98,7 +97,7 @@ func Init(dbDir string, opts ...Option) (err error) {
 }
 
 func Path(dbDir string) string {
-	dbPath := filepath.Join(dbDir, "trivy.db")
+	dbPath := filepath.Join(dbDir, "tunnel.db")
 	return dbPath
 }
 

@@ -4,22 +4,21 @@ import (
 	"log"
 	"time"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/db"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/metadata"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/xerrors"
 	"k8s.io/utils/clock"
-
-	"github.com/aquasecurity/trivy-db/pkg/db"
-	"github.com/aquasecurity/trivy-db/pkg/metadata"
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 type VulnDB interface {
 	Build(targets []string) error
 }
 
-type TrivyDB struct {
+type TunnelDB struct {
 	dbc            db.Config
 	metadata       metadata.Client
 	vulnClient     vulnerability.Vulnerability
@@ -29,21 +28,21 @@ type TrivyDB struct {
 	clock          clock.Clock
 }
 
-type Option func(*TrivyDB)
+type Option func(*TunnelDB)
 
 func WithClock(clock clock.Clock) Option {
-	return func(core *TrivyDB) {
+	return func(core *TunnelDB) {
 		core.clock = clock
 	}
 }
 
 func WithVulnSrcs(srcs map[types.SourceID]vulnsrc.VulnSrc) Option {
-	return func(core *TrivyDB) {
+	return func(core *TunnelDB) {
 		core.vulnSrcs = srcs
 	}
 }
 
-func New(cacheDir, outputDir string, updateInterval time.Duration, opts ...Option) *TrivyDB {
+func New(cacheDir, outputDir string, updateInterval time.Duration, opts ...Option) *TunnelDB {
 	// Initialize map
 	vulnSrcs := map[types.SourceID]vulnsrc.VulnSrc{}
 	for _, v := range vulnsrc.All {
@@ -51,7 +50,7 @@ func New(cacheDir, outputDir string, updateInterval time.Duration, opts ...Optio
 	}
 
 	dbc := db.Config{}
-	tdb := &TrivyDB{
+	tdb := &TunnelDB{
 		dbc:            dbc,
 		metadata:       metadata.NewClient(outputDir),
 		vulnClient:     vulnerability.New(dbc),
@@ -68,7 +67,7 @@ func New(cacheDir, outputDir string, updateInterval time.Duration, opts ...Optio
 	return tdb
 }
 
-func (t TrivyDB) Insert(targets []string) error {
+func (t TunnelDB) Insert(targets []string) error {
 	log.Println("Updating vulnerability database...")
 	for _, target := range targets {
 		src, ok := t.vulnSrc(target)
@@ -95,7 +94,7 @@ func (t TrivyDB) Insert(targets []string) error {
 	return nil
 }
 
-func (t TrivyDB) Build(targets []string) error {
+func (t TunnelDB) Build(targets []string) error {
 	// Insert all security advisories
 	if err := t.Insert(targets); err != nil {
 		return xerrors.Errorf("insert error: %w", err)
@@ -114,7 +113,7 @@ func (t TrivyDB) Build(targets []string) error {
 	return nil
 }
 
-func (t TrivyDB) vulnSrc(target string) (vulnsrc.VulnSrc, bool) {
+func (t TunnelDB) vulnSrc(target string) (vulnsrc.VulnSrc, bool) {
 	for _, src := range t.vulnSrcs {
 		if target == string(src.Name()) {
 			return src, true
@@ -123,9 +122,9 @@ func (t TrivyDB) vulnSrc(target string) (vulnsrc.VulnSrc, bool) {
 	return nil, false
 }
 
-func (t TrivyDB) optimize() error {
+func (t TunnelDB) optimize() error {
 	// NVD also contains many vulnerabilities that are not related to OS packages or language-specific packages.
-	// Trivy DB will not store them so that it could reduce the database size.
+	// Tunnel DB will not store them so that it could reduce the database size.
 	// This bucket has only vulnerability IDs provided by vendors. They must be stored.
 	err := t.dbc.ForEachVulnerabilityID(func(tx *bolt.Tx, cveID string) error {
 		details := t.vulnClient.GetDetails(cveID)
@@ -156,7 +155,7 @@ func (t TrivyDB) optimize() error {
 	return nil
 }
 
-func (t TrivyDB) cleanup() error {
+func (t TunnelDB) cleanup() error {
 	if err := t.dbc.DeleteVulnerabilityIDBucket(); err != nil {
 		return xerrors.Errorf("failed to delete severity bucket: %w", err)
 	}

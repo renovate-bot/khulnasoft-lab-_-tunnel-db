@@ -110,7 +110,7 @@ type Advisory struct {
 	// e.g. Will not fix and Affected
 	Status Status `json:"-"`
 
-	// Trivy DB has "vulnerability" bucket and severities are usually stored in the bucket per a vulnerability ID.
+	// Tunnel DB has "vulnerability" bucket and severities are usually stored in the bucket per a vulnerability ID.
 	// In some cases, the advisory may have multiple severities depending on the packages.
 	// For example, CVE-2015-2328 in Debian has "unimportant" for mongodb and "low" for pcre3.
 	// e.g. https://security-tracker.debian.org/tracker/CVE-2015-2328

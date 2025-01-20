@@ -6,11 +6,10 @@ import (
 	"log"
 	"path/filepath"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	"golang.org/x/exp/slices"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/utils"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 // Spec is cocoapods struct

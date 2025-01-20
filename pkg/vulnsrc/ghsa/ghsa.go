@@ -6,12 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/osv"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/osv"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 const (
@@ -23,7 +22,7 @@ const (
 var (
 	ghsaDir = filepath.Join("ghsa", "advisories", "github-reviewed")
 
-	// Mapping between Trivy ecosystem and GHSA ecosystem
+	// Mapping between Tunnel ecosystem and GHSA ecosystem
 	ecosystems = map[types.Ecosystem]string{
 		vulnerability.Composer:  "Composer",
 		vulnerability.Go:        "Go",

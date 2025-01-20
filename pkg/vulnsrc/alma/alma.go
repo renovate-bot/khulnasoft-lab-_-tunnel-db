@@ -8,14 +8,13 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/khulnasoft-lab/tunnel-db/pkg/db"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/types"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/utils"
+	"github.com/khulnasoft-lab/tunnel-db/pkg/vulnsrc/vulnerability"
 	version "github.com/knqyf263/go-rpm-version"
 	bolt "go.etcd.io/bbolt"
 	"golang.org/x/xerrors"
-
-	"github.com/aquasecurity/trivy-db/pkg/db"
-	"github.com/aquasecurity/trivy-db/pkg/types"
-	"github.com/aquasecurity/trivy-db/pkg/utils"
-	"github.com/aquasecurity/trivy-db/pkg/vulnsrc/vulnerability"
 )
 
 const (
@@ -37,7 +36,7 @@ type PutInput struct {
 	CveID        string
 	Vuln         types.VulnerabilityDetail
 	Advisories   map[string]types.Advisory
-	Erratum      Erratum // for extensibility, not used in trivy-db
+	Erratum      Erratum // for extensibility, not used in tunnel-db
 }
 
 type DB interface {
@@ -47,7 +46,7 @@ type DB interface {
 }
 
 type VulnSrc struct {
-	DB // Those who want to customize Trivy DB can override put/get methods.
+	DB // Those who want to customize Tunnel DB can override put/get methods.
 }
 
 // Alma implements the DB interface
