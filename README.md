@@ -75,13 +75,13 @@ If you need to update Tunnel DB more frequently, you can upload a new Tunnel DB 
 ### version 1 (deprecated)
 Tunnel DB v1 reached the end of support on February 2023. Please upgrade Tunnel to v0.23.0 or later.
 
-Read more about the Tunnel DB v1 deprecation in [the discussion](https://github.com/aquasecurity/tunnel/discussions/1653).
+Read more about the Tunnel DB v1 deprecation in [the discussion](https://github.com/khulnasoft/tunnel/discussions/1653).
 
 ### version 2
-Tunnel DB v2 is hosted on [GHCR](https://github.com/orgs/aquasecurity/packages/container/package/tunnel-db).
+Tunnel DB v2 is hosted on [GHCR](https://github.com/orgs/khulnasoft-lab/packages/container/package/tunnel-db).
 Although GitHub displays the `docker pull` command by default, please note that it cannot be downloaded using `docker pull` as it is not a container image.
 
-You can download the actual compiled database via [Tunnel](https://aquasecurity.github.io/tunnel/) or [Oras CLI](https://oras.land/cli/).
+You can download the actual compiled database via [Tunnel](https://khulnasoft.github.io/tunnel/) or [Oras CLI](https://oras.land/cli/).
 
 Tunnel:
 ```sh
@@ -99,4 +99,4 @@ oras < v0.13.0:
 ```sh
 $ oras pull -a ghcr.io/khulnasoft-lab/tunnel-db:2
 ```
-The database can be used for [Air-Gapped Environment](https://aquasecurity.github.io/tunnel/latest/docs/advanced/air-gap/).
+The database can be used for [Air-Gapped Environment](https://khulnasoft.github.io/tunnel/latest/docs/advanced/air-gap/).
