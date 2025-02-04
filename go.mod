@@ -2,7 +2,7 @@ module github.com/khulnasoft-lab/tunnel-db
 
 go 1.22.0
 
-toolchain go1.22.5
+toolchain go1.23.6
 
 require (
 	github.com/aquasecurity/bolt-fixtures v0.0.0-20200903104109-d34e7f983986
